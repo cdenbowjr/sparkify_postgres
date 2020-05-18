@@ -33,6 +33,28 @@ A startup called Sparkify is looking to create a Postgres database with tables d
 
 
 
+## Files and Directory
+
+    ├── .gitignore					<- List of ignored files for git repository.
+    ├── README.md          			<- The top-level README for understanding the project.
+    ├── data						<- Directory for all data used in sparkify DB.
+    │   ├── log_data       			<- User log data for sparkify DB.
+    │   ├── song_data        		<- Song and artist data for sparkify DB.
+    │   └── SongCSV.csv      		<- Additional song and artist data
+    │
+    ├── create_database.py			<- Script for creating sparkify DB
+    ├── create_tables.py			<- Script for creating all tables within sparkify DB
+    ├── ERD.png						<- Entity relationship diagram pictorial
+    ├── etl.py						<- Extract transform and load script for sparkify DB
+    ├── sng_anlys_dbrd.ipynb		<- Jupyter notebook for sparkify analytics dashboard
+    ├── song_analysis_queries.py	<- Additional queries for song analysis
+    ├── sparkify_analytics.png		<- Dash sparkify analytics dashboard picture
+    ├── sql_queries.py 				<- SQL Script for creating and inserting data in tables
+    └── test.ipynb            		<- Jupyter notebook testing for data within sparkify DB
+
+
+
+
 #### Entity Relationship Diagram (ERD)
 
 ![](ERD.png)

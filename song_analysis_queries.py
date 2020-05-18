@@ -11,7 +11,7 @@ ORDER BY count desc"""
 # Weekday that had the most song plays
 weekday_song_query = """SELECT weekday,COUNT(*) \
 FROM "time" t \
-GROUP BY weekday 
+GROUP BY weekday \
 ORDER BY count desc
 """
 
@@ -33,7 +33,7 @@ GROUP BY u.gender,u.level"""
 # Songplay location query
 location_play_query = """SELECT location,COUNT(*) \
 FROM songplay \
-GROUP BY location
+GROUP BY location \
 ORDER BY count DESC"""
 
 # Platform query
@@ -41,4 +41,3 @@ platform_access_query = """SELECT user_agent, COUNT(*) \
 FROM songplay \
 GROUP BY user_agent \
 ORDER BY count DESC"""
-

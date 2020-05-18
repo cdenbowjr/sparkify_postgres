@@ -6,27 +6,22 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """
+    This function uses a connected cursor (cur) and searches a file specified within the filepath to extract song and
+    artist data for insertion into the songs and artists table in the sparkifydb database
+    """
 
     # open song file
-    df = pd.read_json(filepath,lines=True)
-    df2 = pd.read_csv('data/SongCSV.csv')
+    df = pd.read_json(filepath, lines=True)
+    #df2 = pd.read_csv('data/SongCSV.csv')
 
     # insert song record
 
-    song_df = df2.copy()[['SongID', 'Title', 'ArtistID', 'Year', 'Duration']]
-    song_df = song_df.applymap(lambda x: x[1:].strip("'").strip('"""') if type(x) == str else x)
+    #song_df = df2.copy()[['SongID', 'Title', 'ArtistID', 'Year', 'Duration']]
+    #song_df = song_df.applymap(lambda x: x[1:].strip("'").strip('"""') if type(x) == str else x)
 
-    song_data = df.copy()[['song_id','title','artist_id','year','duration']]
-    for i,row in song_data.iterrows():
-
-        try:
-            cur.execute(song_table_insert, list(row))
-
-        except psycopg2.Error as e:
-            print("Error: data not inserted")
-            print(e)
-
-    for i,row in song_df.iterrows():
+    song_data = df.copy()[['song_id', 'title', 'artist_id', 'year', 'duration']]
+    for i, row in song_data.iterrows():
 
         try:
             cur.execute(song_table_insert, list(row))
@@ -35,14 +30,21 @@ def process_song_file(cur, filepath):
             print("Error: data not inserted")
             print(e)
 
-
+    # for i, row in song_df.iterrows():
+    #
+    #     try:
+    #         cur.execute(song_table_insert, list(row))
+    #
+    #     except psycopg2.Error as e:
+    #         print("Error: data not inserted")
+    #         print(e)
 
     # # insert artist record
-    artist_data =df.copy()[['artist_id','artist_name','artist_location','artist_latitude','artist_longitude']]
+    artist_data = df.copy()[['artist_id', 'artist_name', 'artist_location', 'artist_latitude', 'artist_longitude']]
     artist_data.columns = ['artist_id', 'artist_name', 'location', 'latitude', 'longitude']
 
-    artist_df = df2.copy()[['ArtistID', 'ArtistName', 'ArtistLocation', 'ArtistLatitude', 'ArtistLongitude']]
-    artist_df = artist_df.applymap(lambda x: x[1:].strip("'").strip('"""') if type(x) == str else x)
+    # artist_df = df2.copy()[['ArtistID', 'ArtistName', 'ArtistLocation', 'ArtistLatitude', 'ArtistLongitude']]
+    # artist_df = artist_df.applymap(lambda x: x[1:].strip("'").strip('"""') if type(x) == str else x)
 
     for i, row in artist_data.iterrows():
 
@@ -53,28 +55,33 @@ def process_song_file(cur, filepath):
             print("Error: data not inserted")
             print(e)
 
-    for i, row in artist_df.iterrows():
-
-        try:
-            cur.execute(artist_table_insert, list(row))
-
-        except psycopg2.Error as e:
-            print("Error: data not inserted")
-            print(e)
+    # for i, row in artist_df.iterrows():
+    #
+    #     try:
+    #         cur.execute(artist_table_insert, list(row))
+    #
+    #     except psycopg2.Error as e:
+    #         print("Error: data not inserted")
+    #         print(e)
 
 
 def process_log_file(cur, filepath):
+    """
+        This function uses a connected cursor (cur) and searches a file specified within the filepath to extract log
+        data related to timestamps, users and songplays for insertion into the time, users and songplay table in the
+        sparkifydb database
+    """
     # open log file
-    df = pd.read_json(filepath,lines=True)
+    df = pd.read_json(filepath, lines=True)
 
     # filter by NextSong action
     df = df[df.page == 'NextSong']
 
     # convert timestamp column to datetime
-    time_stamp = pd.to_datetime(df.ts,unit='ms')
+    time_stamp = pd.to_datetime(df.ts, unit='ms')
     time_stamp.name = 'start_time'
     time_df = pd.DataFrame(time_stamp.dt.time)
-    
+
     # insert time data records
     time_df['hour'] = time_stamp.dt.hour
     time_df['day'] = time_stamp.dt.day
@@ -90,7 +97,6 @@ def process_log_file(cur, filepath):
         except psycopg2.Error as e:
             print("Error: data not inserted")
             print(e)
-
 
     # load user table
 
@@ -141,11 +147,17 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """
+    This function uses a connected cursor (cur) to loop through all files specified in the filepath specified and
+    executes the specified function (func) on each file in the directory
+    1. It prints out the number of files found in the directory specified by the filepath
+    2. It also prints out a status of the number of files processed out of the total for each loop
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
-        files = glob.glob(os.path.join(root,'*.json'))
-        for f in files :
+        files = glob.glob(os.path.join(root, '*.json'))
+        for f in files:
             all_files.append(os.path.abspath(f))
 
     # get total number of files found
@@ -154,12 +166,16 @@ def process_data(cur, conn, filepath, func):
 
     # iterate over files and process
     for i, datafile in enumerate(all_files, 1):
-            func(cur, datafile)
-            conn.commit()
-            print('{}/{} files processed.'.format(i, num_files))
+        func(cur, datafile)
+        conn.commit()
+        print('{}/{} files processed.'.format(i, num_files))
 
 
 def main():
+    """
+    This function connects to the sparkifydb, creates a connected cursor (cur) and processes files in the song data
+    and log data file directory, then closes the connection
+    """
     conn = psycopg2.connect("host=127.0.0.1 dbname=sparkifydb user=postgres password=1234")
     cur = conn.cursor()
 
