@@ -50,3 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Other files
+msdHDF5toCSV.py
+hdf5_getters.py
+etl.ipynb
+tmp_data
+__pycache__
+.ipynb_checkpoints
+song_database.ipynb
