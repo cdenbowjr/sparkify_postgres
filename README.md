@@ -2,11 +2,11 @@
 
 ## Project 1 - Building Relational Databases
 
-#### Summary
+### Summary
 
 A startup called Sparkify is looking to create a Postgres database with tables designed to optimize queries on song play analysis. Their analytics team is interested in understanding what songs users are listening to on their new music streaming app.
 
-#### Requirement
+### Requirement
 
 1. Build the schema for a Postgres relational database called "sparkifydb"
 2. Build 5 tables in a star schema arrangement (1 Fact table and 4 Dimension tables)
@@ -15,7 +15,7 @@ A startup called Sparkify is looking to create a Postgres database with tables d
 
 
 
-#### Process
+### Process
 
 1. A python script that creates a new sparkify database is programmed using [create_database.py](create_database.py).
 2. Drop table and create table individual queries were programmed for each table in [sql_queries.py](sql_queries.py). One large list of queries is created to designate the sequence in which each table must be created (with the songplay table being created last because table will have foreign keys linking to the 4 other dimension tables). *CONSTRAINT ... FOREIGN KEY* expressions are used in the song play table to create the star arrangement.
@@ -25,7 +25,7 @@ A startup called Sparkify is looking to create a Postgres database with tables d
 
 
 
-#### How to run it
+### How to run it
 
 1. Run create_tables.py
 2. Run etl.py
@@ -33,7 +33,7 @@ A startup called Sparkify is looking to create a Postgres database with tables d
 
 
 
-## Files and Directory
+### Files and Directory
 
     ├── .gitignore					<- List of ignored files for git repository.
     ├── README.md          			<- The top-level README for understanding the project.
@@ -55,11 +55,11 @@ A startup called Sparkify is looking to create a Postgres database with tables d
 
 
 
-#### Entity Relationship Diagram (ERD)
+### Entity Relationship Diagram (ERD)
 
 ![](ERD.png)
 
-#### Results
+### Results
 
 ![](sparkify_analytics.png)
 
